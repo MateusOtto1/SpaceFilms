@@ -50,7 +50,6 @@ function Home() {
 
     window.addEventListener('scroll', function () {
         var tituloBanner = document.querySelector('.some');
-
         if (window.scrollY > 100) {
             tituloBanner.classList.add('desaparece');
         } else {

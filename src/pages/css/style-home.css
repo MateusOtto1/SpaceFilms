@@ -136,10 +136,12 @@
 
 @keyframes direita {
     from {
+      opacity: 0;
       margin-left: 100%;
     }
   
     to {
+      opacity: 1;
       margin-left: 0%;
     }
   }
@@ -159,23 +161,32 @@
 
 @keyframes baixo {
     from {
+      opacity: 0;
       margin-top: 100%;
     }
   
     to {
+      opacity: 1;
       margin-top: 0%;
     }
   }
 
 @keyframes esquerda {
     from {
+      opacity: 0;
       margin-left: -100%;
     }
   
     to {
+      opacity: 1;
       margin-left: 0%;
     }
   }
+
+.container-btn-filmes{
+  animation-duration: 2s;
+  animation-name: baixo;
+}
 
 .descricao-btnfilme{
     font-size: 1.8rem;
@@ -202,8 +213,6 @@
     font-size: 1.7rem;
     font-weight: 550;
     cursor: pointer;
-    animation-duration: 3s;
-    animation-name: baixo;
 }
 
 .btn-filmes:hover{
