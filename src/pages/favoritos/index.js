@@ -15,6 +15,7 @@ function Home() {
     const navigate = useNavigate();
     const [searchResults, setSearchResults] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
+    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
         const moviesSaved = JSON.parse(localStorage.getItem("favoriteMovies")) || [];
@@ -26,14 +27,19 @@ function Home() {
         setSearchResults(moviesFiltered);
     }, [searchTerm, favoriteMovies]);
 
-    window.addEventListener('scroll', function () {
-        var navbar = document.querySelector('.NavBar');
-        if (window.scrollY >= 10) {
-            navbar.classList.add('scrolled');
+    useEffect(() => {
+      const handleScroll = () => {
+        if (window.scrollY > 10) {
+          setScrolled(true);
         } else {
-            navbar.classList.remove('scrolled');
+          setScrolled(false);
         }
-    });
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
 
     const handleClick = () => {
         navigate('/');
@@ -45,7 +51,7 @@ function Home() {
 
     return (
         <>
-            <Navbar expand="lg" className="NavBar">
+            <Navbar expand="lg" className={`NavBar ${scrolled ? "scrolled" : ""}`}>
                 <Container fluid>
                     <Navbar.Brand href="#" className="titulo-navbar">SpaceFilms</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" className="risquinhos" />
@@ -75,7 +81,7 @@ function Home() {
 
             <ContainerCss>
                 <div className="favoritos-cont">
-                    <div className="container-home">
+                    <div className="container-favoritos">
                     {searchResults.map((movie) => {
                         return (
                             <Link to={`/${movie.id}`} className="link">

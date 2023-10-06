@@ -1,5 +1,4 @@
 .body-desc{
-  background-image: url(/src/imagens/espaço.jpg);
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -7,9 +6,9 @@
 }
 
 .base-desc{
-  background-color: rgba(0, 0, 0, 0.815);
+  background: linear-gradient(rgba(0, 0, 0, 0.192), rgb(0, 0, 0));
   width: 100%;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 
 nav {
@@ -169,4 +168,8 @@ nav h1 {
   left: 0;
   top: 0;
   border-radius: 10px;
+}
+
+.bg{
+  margin-top: 1.5rem;
 }

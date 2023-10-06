@@ -14,7 +14,7 @@
 
 .letra-navbar{
     color:aliceblue !important;
-    font-size: 1.4rem !important;
+    font-size: 1.3rem !important;
     font-weight: 500 !important;
     margin-top: 0.4rem !important;
     margin-left: 0.5rem !important;
@@ -39,7 +39,7 @@
 }
 
 .escolha{
-    font-size: 1.4rem !important;
+    font-size: 1.3rem !important;
     font-weight: 500 !important;
 }
 
@@ -309,4 +309,54 @@
 .espaco-carrosel{
   margin-top: 4rem;
   margin-bottom: 1rem;
+}
+
+.container-favoritos{
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4rem;
+  z-index: 1;
+}
+
+.container-favoritos .card {
+  position: relative;
+  z-index: 1;
+  width: 230px !important;
+  height: 330px !important;
+  border-radius: 15px;
+  overflow: hidden !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+}
+
+.container-favoritos .card .content {
+  padding: 20px;
+  text-align: center;
+  transition: 1s;
+  opacity: 0;
+  z-index: 10000;
+  background-color: #000000b7;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container-favoritos .card:hover .content {
+  opacity: 1;
+}
+
+.container-favoritos .card .content span {
+  font-size: 1.7rem;
+  color: #fff;
+  font-weight: 600;
+  display: block;
 }

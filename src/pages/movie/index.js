@@ -7,13 +7,47 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from "react-router-dom";
+import MediaQuery from 'react-responsive';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const Movie = () => {
     const { id } = useParams();
-    const imagePath = "https://image.tmdb.org/t/p/w500";
+    const imagePath = "https://image.tmdb.org/t/p/w1280";
     const [movie, setMovie] = useState([]);
     const KEY = process.env.REACT_APP_KEY;
     const navigate = useNavigate();
+    const [isFavorite, setIsFavorite] = useState(false);
+    const[movies, setMovies] = useState([]);
+    const [genero, setGenero] = useState([]);
+    const [scrolled, setScrolled] = useState(false);
+
+    const carouselSettings = {
+        dots: false,
+        infinite: true,
+        speed: 800,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 6000,
+        arrows: false,
+    };
+
+    const movieChunks = [];
+    for (let i = 0; i < movies.length; i += movies.length) {
+        movieChunks.push(movies.slice(i, i + movies.length));
+    };
+
+    useEffect(() => {
+        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=${genero}`)
+        .then((response) => response.json())
+        .then((data) => {
+            setMovies(data.results);
+            console.log(movie);
+        });
+        document.querySelector('.body-desc').style.backgroundImage = `url(${imagePath}${movie.poster_path})`;
+    }, [genero]);
+
 
     useEffect(() => {
         const favoriteMovies = JSON.parse(localStorage.getItem("favoriteMovies")) || [];
@@ -21,7 +55,19 @@ const Movie = () => {
         setIsFavorite(isAlreadyFavorite);
     }, [id]);
 
-    const [isFavorite, setIsFavorite] = useState(false);
+    useEffect(() => {
+      const handleScroll = () => {
+        if (window.scrollY > 10) {
+          setScrolled(true);
+        } else {
+          setScrolled(false);
+        }
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
 
     useEffect(() => {
         fetch(
@@ -29,22 +75,14 @@ const Movie = () => {
         )
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 if (data) {
                     setMovie(data);
+                    const generos = data.genres.map((genero) => genero.id);
+                    setGenero(generos.join(", "));
                 } else {
                     console.error("No movie data found in the API response.");
                 }
             }); // eslint-disable-next-line
-    }, []);
-
-    window.addEventListener('scroll', function () {
-        var navbar = document.querySelector('.NavBar');
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
     });
 
     const toggleFavorite = () => {
@@ -72,7 +110,7 @@ const Movie = () => {
 
     return (
         <>
-        <Navbar expand="lg" className="NavBar">
+        <Navbar expand="lg" className={`NavBar ${scrolled ? "scrolled" : ""}`}>
                 <Container fluid>
                     <Navbar.Brand href="#" className="titulo-navbar">SpaceFilms</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" className="risquinhos" />
@@ -90,7 +128,7 @@ const Movie = () => {
             </Navbar>
         <div className="body-desc">
             <div className="base-desc">
-                <nav>
+                 <nav>
                     
                 </nav>
                 <div className="container-desc-tudo">
@@ -112,10 +150,48 @@ const Movie = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> 
+                </div> 
             </div>
         </div>
+        <div className="bg">
+        <div className="container-home">
+                {movieChunks.map((chunk, index) => (
+                    <MediaQuery key={index} maxWidth={1100} className="media">
+                        {(matches) => (
+                            <div key={index}>
+                                <h2>Filmes Semelhantes</h2>
+                                <div className="cont-h">
+                                    <Slider
+                                        key={index}
+                                        {...carouselSettings}
+                                        slidesToShow={matches ? 1 : 4}
+                                        className="slider"
+                                    >
+                                        {chunk.map((movie) => {
+                                            return (
+                                                <div className="teste">
+                                                    <Link to={`/${movie.id}`} className="link">
+                                                        <div className="card" key={movie.id}>
+                                                            <img src={`${imagePath}${movie.poster_path}`} alt="{movie.title}" className="img" />
+                                                            <div className="content">
+                                                                <span>{movie.title}</span>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            );
+                                        })}
+                                        <div id="anime"></div>
+                                    </Slider>
+                                </div>
+                                
+                            </div>
+                        )}
+                    </MediaQuery>
+                ))}
+            </div>
+            </div>
         </>
     );
 };

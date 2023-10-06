@@ -24,6 +24,8 @@ function Home() {
     const [moviesTerror, setMoviesTerror] = useState([]);
     const [moviesRomance, setMoviesRomance] = useState([]);
     const [moviesFicao, setMoviesFicao] = useState([]);
+    const [desaparece, setDesaparece] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
     const carouselSettings = {
         dots: false,
@@ -39,7 +41,7 @@ function Home() {
     for (let i = 0; i < movies.length; i += movies.length) {
         movieChunks.push(movies.slice(i, i + movies.length));
     };
-    const movieChunksAnime= [];
+    const movieChunksAnime = [];
     for (let i = 0; i < moviesAnime.length; i += moviesAnime.length) {
         movieChunksAnime.push(moviesAnime.slice(i, i + moviesAnime.length));
     };
@@ -62,37 +64,47 @@ function Home() {
 
     useEffect(() => {
         if (searchTerm.trim() == "") {
-        fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${KEY}&language=pt-BR`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMovies(data.results);
-            });
-        }else{
+            fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${KEY}&language=pt-BR`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setMovies(data.results);
+                });
+        } else {
             fetch(`https://api.themoviedb.org/3/search/movie?api_key=${KEY}&query=${searchTerm}&language=pt-BR`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMovies(data.results);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setMovies(data.results);
+                });
         }
     });
 
-    window.addEventListener('scroll', function () {
-        var navbar = document.querySelector('.NavBar');
-        if (window.scrollY > 600) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 600) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
-    window.addEventListener('scroll', function () {
-        var tituloBanner = document.querySelector('.some');
-        if (window.scrollY > 100) {
-            tituloBanner.classList.add('desaparece');
-        } else {
-            tituloBanner.classList.remove('desaparece');
-        }
-    });
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                setDesaparece(true);
+            } else {
+                setDesaparece(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
     const handleClick = () => {
         navigate('/');
@@ -104,87 +116,87 @@ function Home() {
 
     useEffect(() => {
         if (searchTerm.trim() == "") {
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=16`)
-        .then((response) => response.json())
-        .then((data) => {
-            setMoviesAnime(data.results);
-        });
-        }else{
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=16`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesAnime(data.results);
+                });
+        } else {
             fetch(`https://api.themoviedb.org/3/search/movie?api_key=${KEY}&query=${searchTerm}&language=pt-BR&with_genres=16`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesAnime(data.results);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesAnime(data.results);
+                });
         }
     });
 
     useEffect(() => {
         if (searchTerm.trim() == "") {
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=35`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesComedia(data.results);
-            });
-        }else{
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=35`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesComedia(data.results);
+                });
+        } else {
             fetch(`https://api.themoviedb.org/3/search/movie?api_key=${KEY}&query=${searchTerm}&language=pt-BR&with_genres=35`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesComedia(data.results);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesComedia(data.results);
+                });
         }
     });
 
     useEffect(() => {
         if (searchTerm.trim() == "") {
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=27`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesTerror(data.results);
-            });
-        }else{
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=27`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesTerror(data.results);
+                });
+        } else {
             fetch(`https://api.themoviedb.org/3/search/movie?api_key=${KEY}&query=${searchTerm}&language=pt-BR&with_genres=27`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesTerror(data.results);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesTerror(data.results);
+                });
         }
     });
 
     useEffect(() => {
         if (searchTerm.trim() == "") {
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=10749`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesRomance(data.results);
-            });
-        }else{
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=10749`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesRomance(data.results);
+                });
+        } else {
             fetch(`https://api.themoviedb.org/3/search/movie?api_key=${KEY}&query=${searchTerm}&language=pt-BR&with_genres=10749`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesRomance(data.results);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesRomance(data.results);
+                });
         }
     });
 
     useEffect(() => {
         if (searchTerm.trim() == "") {
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=878`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesFicao(data.results);
-            });
-        }else{
+            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${KEY}&language=pt-BR&with_genres=878`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesFicao(data.results);
+                });
+        } else {
             fetch(`https://api.themoviedb.org/3/search/movie?api_key=${KEY}&query=${searchTerm}&language=pt-BR&with_genres=878`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMoviesFicao(data.results);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    setMoviesFicao(data.results);
+                });
         }
     });
 
     return (
         <>
-            <Navbar expand="lg" className="NavBar">
+            <Navbar expand="lg" className={`NavBar ${scrolled ? "scrolled" : ""}`}>
                 <Container fluid>
                     <Navbar.Brand href="#" className="titulo-navbar">SpaceFilms</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" className="risquinhos" />
@@ -219,14 +231,14 @@ function Home() {
             </Navbar>
             <div className="banner">
                 <div className="base">
-                    <div className="container-base some">
+                    <div className={`container-base some ${desaparece ? "desaparece" : ""}`}>
                         <div className="container-banner">
                             <h1 className="titulo-banner">SpaceFilms</h1>
                             <h4 className="subtitulo-banner">Viaje em seus filmes com o SpaceFilms!</h4>
                             <h4 className="subsubtitulo-banner">O SpaceFilms é o seu portal para o universo da ficção científica. Aqui, você pode explorar mundos alienígenas, conhecer novas formas de vida e testemunhar as aventuras mais incríveis que a imaginação humana pode criar.</h4>
                         </div>
                         <div className="container-btn-filmes">
-                            <p className="descricao-btnfilme">Ache seus filmes aqui!</p>
+                            <p className="descricao-btnfilme">Ache os melhores filmes aqui!</p>
                             <div className="div-btn-filmes">
                                 <a href="#filmes">
                                     <button className="button-85">Filmes</button>
@@ -267,7 +279,7 @@ function Home() {
                                         <div id="anime"></div>
                                     </Slider>
                                 </div>
-                                
+
                             </div>
                         )}
                     </MediaQuery>
@@ -305,7 +317,7 @@ function Home() {
                         )}
                     </MediaQuery>
                 ))}
-                 {movieChunksComedia.map((chunk, index) => (
+                {movieChunksComedia.map((chunk, index) => (
                     <MediaQuery key={index} maxWidth={1100} className="media">
                         {(matches) => (
                             <div key={index}>
