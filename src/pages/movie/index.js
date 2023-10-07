@@ -14,7 +14,7 @@ import 'slick-carousel/slick/slick-theme.css';
 
 const Movie = () => {
     const { id } = useParams();
-    const imagePath = "https://image.tmdb.org/t/p/w1280";
+    const imagePath = "https://image.tmdb.org/t/p/original";
     const [movie, setMovie] = useState([]);
     const KEY = process.env.REACT_APP_KEY;
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Movie = () => {
             setMovies(data.results);
             console.log(movie);
         });
-        document.querySelector('.body-desc').style.backgroundImage = `url(${imagePath}${movie.poster_path})`;
+        document.querySelector('.body-desc').style.backgroundImage = `url(${imagePath}${movie.backdrop_path})`;
     }, [genero]);
 
 
